@@ -1,0 +1,27 @@
+
+name: Build Voltronic add-on
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "voltronic-inverters/**"
+      - ".github/workflows/build.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ARM64 image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./voltronic-inverters
+          platforms: linux/arm64
+          push: false
+          tags: voltronic-addon:diagnostic
