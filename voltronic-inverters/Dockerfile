@@ -14,14 +14,13 @@ RUN apt-get update && apt-get install -y \
 # Set the working directory
 WORKDIR /opt
 
-# Define the desired commit hash
-ARG GIT_COMMIT=a01e305846c697d985847405909e91ba81289a49
+# Use the fork containing the diagnostic change
+ARG GIT_BRANCH=patch-1
 
-# Clone the repository with Sparse Checkout and check out the specific commit
-RUN git clone --filter=blob:none --no-checkout https://github.com/catalinbordan/docker-voltronic-homeassistant.git repo && \
+RUN git clone --filter=blob:none --no-checkout https://github.com/prchallukas-svg/docker-voltronic-homeassistant.git repo && \
     cd repo && \
-    git fetch origin $GIT_COMMIT && \
-    git checkout $GIT_COMMIT && \
+    git fetch origin "$GIT_BRANCH" && \
+    git checkout FETCH_HEAD && \
     git sparse-checkout init --cone && \
     git sparse-checkout set sources config
 
